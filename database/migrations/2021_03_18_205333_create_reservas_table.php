@@ -16,9 +16,10 @@ class CreateReservasTable extends Migration
         Schema::create('reservas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('usuario_id');
-            $table->foreign('usuario_id')->references('id')->on('usuarios');            
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');            
             $table->datetime('fecha');            
             $table->integer('cantidad');
+            $table->string('codigo');
             $table->timestamps();
         });
     }

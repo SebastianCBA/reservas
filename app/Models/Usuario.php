@@ -12,4 +12,7 @@ class Usuario extends Model
         'nombres',
         'apellidos',
     ];    
+    public function reservas() {
+       return $this->hasMany(Reserva::class); 
+    }    
 }

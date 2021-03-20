@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reserva;
 
 class ReservaController extends Controller
 {
@@ -13,7 +14,8 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        //
+        $reservas = Reserva::paginate(20);
+        return view('reservas.index')->with('reservas', $reservas);
     }
 
     /**
