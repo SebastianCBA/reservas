@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" ng-app="app">
 <head>
     <meta charset="utf-8">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,9 +20,9 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>    
     
-
+@yield('head')
 </head>
-<body>
+<body ng-controller="appController">
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
@@ -43,8 +44,8 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ route('usuarios') }}">Usuarios</a></li>
-                        <li><a href="{{ route('reservas') }}">Reservas</a></li>                        
+                        <li><a href="{{ route('usuarios') }}" target="_self">Usuarios</a></li>
+                        <li><a href="{{ route('reservas') }}" target="_self">Reservas</a></li>                        
                     </ul>
 
                 </div>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
 	<a href="{{ route('usuarios.crear') }}" class="btn btn-info pull-right">Crear Usuario</a>
-	
+	@if(count($usuarios))
 	<table class="table table-striped">
 		<thead>
 			<th>Id</th>
@@ -33,6 +33,11 @@
 		</tbody>
 	</table>
 	{{ $usuarios->render() }}
+	@else
+		<div>
+			<p>Aun no hay usuarios</p>
+		</div>	
+	@endif
 
 </div>
 @endsection

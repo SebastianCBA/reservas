@@ -17,4 +17,7 @@ class Reserva extends Model
     public function usuario() {
         return $this->belongsTo(Usuario::class, 'usuario_id'); 
     }    
+    public function detalle() {
+       return $this->hasMany(Detalle::class); 
+    }      
 }

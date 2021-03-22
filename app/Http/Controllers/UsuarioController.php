@@ -39,7 +39,7 @@ class UsuarioController extends Controller
         $usuario = new Usuario($request->all());
         $usuario->save();
         return redirect()->route('usuarios')
-                         ->with('success',"Usuario ".$usuario->nombres." creado");
+                         ->with('success',"Usuario ".$usuario->nombres." ".$usuario->apellidos." creado");
     }
 
     /**
@@ -80,7 +80,7 @@ class UsuarioController extends Controller
         $usuario->fill($input);
         $usuario->save();
         return redirect()->route('usuarios')
-                         ->with('success',"Usuario ".$usuario->nombres." actualizado");        
+                         ->with('success',"Usuario ".$usuario->nombres." ".$usuario->apellidos." actualizado");        
     }
 
     /**

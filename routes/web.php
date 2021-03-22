@@ -26,4 +26,12 @@ Route::post('/actualizar-usuario/{id}', [UsuarioController::class, 'update'])->n
 Route::get('/destruir-usuario/{id}', [UsuarioController::class, 'destroy'])->name('usuarios.destruir');
 
 Route::get('/reservas', [ReservaController::class, 'index'])->name('reservas');
-Route::get('/reservar', [UsuarioController::class, 'create'])->name('reservas.reservar');
+Route::get('/reservar', [ReservaController::class, 'create'])->name('reservas.crear');
+Route::post('/guardar-reserva', [ReservaController::class, 'store'])->name('reservas.guardar');
+Route::get('/editar-reserva/{id}', [ReservaController::class, 'edit'])->name('reservas.editar');
+Route::post('/actualizar-reserva/{id}', [ReservaController::class, 'update'])->name('reservas.actualizar');
+Route::get('/destruir-reserva/{id}', [ReservaController::class, 'destroy'])->name('reservas.destruir');
+
+
+
+Route::get('/consultardisponibilidad/{dia}/{mes}/{ano}', [ReservaController::class, 'disponibilidad'])->name('disponibilidad');
