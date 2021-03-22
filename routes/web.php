@@ -35,3 +35,4 @@ Route::get('/destruir-reserva/{id}', [ReservaController::class, 'destroy'])->nam
 
 
 Route::get('/consultardisponibilidad/{dia}/{mes}/{ano}', [ReservaController::class, 'disponibilidad'])->name('disponibilidad');
+Route::get('/buscoreserva/{id}', [ReservaController::class, 'buscoreserva'])->name('buscoreserva');

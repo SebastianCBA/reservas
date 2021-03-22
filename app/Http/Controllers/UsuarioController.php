@@ -92,7 +92,6 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
         $usuario = Usuario::find($id);
-        //falta borrar cascada reservas/detalles
         $usuario->delete();
         return redirect()->route('usuarios')
                             ->with('error',"El usuario ".$usuario->nombres." ".$usuario->apellidos." ha sido eliminado");                

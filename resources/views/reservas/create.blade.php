@@ -7,6 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
     <link href="{{ asset('js/chosen/chosen.css') }}" rel="stylesheet">
     <script src="{{ asset('js/chosen/chosen.jquery.js') }}"></script>
+    <script>
+        var seccion_id = 1;
+        var cantidad = 0;
+    </script>
 @endsection
 
 @section('content')

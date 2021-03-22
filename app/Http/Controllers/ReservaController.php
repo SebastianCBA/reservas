@@ -22,9 +22,9 @@ class ReservaController extends Controller
         $fecha = date("Y-m-d",strtotime("$dia/$mes/$ano"));
 
         $matriz = array();
-        for($i = 0; $i<10; $i++)
+        for($i = 0; $i<5; $i++)
             {
-             for($j = 0; $j<5; $j++)   
+             for($j = 0; $j<10; $j++)   
                  {
                   $matriz[$i][$j]=0;                
                  }
@@ -40,6 +40,43 @@ class ReservaController extends Controller
             {
             $matriz[$reserva->fila][$reserva->columna] = 1;
             }
+        return response()->json($matriz);
+    }
+
+    public function buscoreserva($id)
+    {
+        
+        $matriz = array();
+        for($i = 0; $i<5; $i++)
+            {
+             for($j = 0; $j<10; $j++)   
+                 {
+                  $matriz[$i][$j]=0;                
+                 }
+            }   
+        $reserva = Reserva::Find($id);
+        $butacas = DB::Table('detalles')
+                        ->join('reservas', 'detalles.reserva_id','=', 'reservas.id')
+                        ->where('reservas.id', $id)
+                        ->select('fila', 'columna')
+                        ->get();
+
+        foreach($butacas as $butaca)
+            {
+            $matriz[$butaca->fila][$butaca->columna] = 2;
+            }
+ 
+        $butacas = DB::Table('detalles')
+                        ->join('reservas', 'detalles.reserva_id','=', 'reservas.id')
+                        ->where('reservas.fecha', $reserva->fecha)
+                        ->where('reservas.id', '<>', $reserva->id)
+                        ->select('fila', 'columna')
+                        ->get();
+
+        foreach($butacas as $butaca)
+            {
+            $matriz[$butaca->fila][$butaca->columna] = 1;
+            }            
         return response()->json($matriz);
     }
 
@@ -83,13 +120,11 @@ class ReservaController extends Controller
         
         for($fila = 0; $fila < 5; $fila++)
             {
-                
                 $row = $matriz[$fila];
                 for($columna = 0; $columna < 10; $columna++)
                     {
                     if($row[$columna] == '2')
                         {
-                           // return response()->json($columna);
                             $detalle = new Detalle();
                             $detalle->reserva_id = $reserva->id;
                             $detalle->fila = $fila;
@@ -100,7 +135,7 @@ class ReservaController extends Controller
                     }
 
             }
-        return response()->json($request->butacas[0]);
+        return response()->json('ok');
     }
 
     /**
@@ -122,7 +157,12 @@ class ReservaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $reserva = Reserva::find($id);
+        $usuarios = Usuario::Select(DB::raw('concat(nombres, " ", apellidos) as name'), 'id')->pluck('name', 'id');      
+        
+        return view('reservas.edit')
+                    ->with('reserva', $reserva)     
+                    ->with('usuarios', $usuarios);        
     }
 
     /**
@@ -134,7 +174,41 @@ class ReservaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $detalles = Detalle::Where('reserva_id', $id)->get();
+        foreach($detalles as $detalle)
+            {
+             $row = Detalle::Find($detalle->id);
+             $row->delete();
+            }
+
+        $reserva = Reserva::Find($id);
+        
+        
+        $reserva->usuario_id = $request->usuario_id;
+        $reserva->fecha = date('Y/m/d 00:00:00',strtotime($request->fecha));
+        $reserva->cantidad = $request->cantidad;
+        
+        $reserva->save();
+        $matriz = $request->butacas;
+        
+        for($fila = 0; $fila < 5; $fila++)
+            {
+                $row = $matriz[$fila];
+                for($columna = 0; $columna < 10; $columna++)
+                    {
+                    if($row[$columna] == '2')
+                        {
+                            $detalle = new Detalle();
+                            $detalle->reserva_id = $reserva->id;
+                            $detalle->fila = $fila;
+                            $detalle->columna = $columna;
+                            $detalle->save();
+                        }    
+
+                    }
+
+            }
+        return response()->json('ok');
     }
 
     /**
@@ -145,6 +219,9 @@ class ReservaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $reserva = Reserva::find($id);
+        $reserva->delete();
+        return redirect()->route('reservas')
+                            ->with('error',"La reserva ".$reserva->codigo." ha sido eliminada");
     }
 }

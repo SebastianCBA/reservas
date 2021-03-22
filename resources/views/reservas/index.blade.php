@@ -18,7 +18,7 @@
 			@foreach($reservas as $reserva)
 				<tr>
 					<td>{{ $reserva->codigo }}</td>
-					<td>{{ $reserva->usuario->nombres }}</td>
+					<td>{{ $reserva->usuario->nombres }} {{ $reserva->usuario->apellidos }}</td>
 					<td>{{ date("d/m/Y", strtotime($reserva->fecha)) }}</td>
 					<td>{{ $reserva->cantidad }}</td>
 					<td>
@@ -26,7 +26,7 @@
 							<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
 					</a> 
 					<a href="{{ route('reservas.destruir', $reserva->id) }}" title="Destruir" 
-							onclick="return confirm('Estas seguro que quieres eliminar la reserva {{ $reserva->codigo }} {{ $reserva->usuario->apellidos }}?')" 
+							onclick="return confirm('Estas seguro que quieres eliminar la reserva {{ $reserva->codigo }}?')" 
 							class="btn btn-danger">						
 							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>						
 					</td>

@@ -21,7 +21,7 @@ app.config(['$locationProvider', function($locationProvider){
 app.controller("appController", ['$scope', '$sce', 'BASE', '$window', '$rootScope',  '$http','$q','$location','$filter',  function ($scope, $sce, BASE, $window, $rootScope, $http, $q, $location, $filter) {
   
   $rootScope.base = BASE;
-  $scope.fecha = '';
+  $scope.fecha = fecha;
   
   $scope.butacas = [];
   $scope.filas = 5;
@@ -85,6 +85,32 @@ app.controller("appController", ['$scope', '$sce', 'BASE', '$window', '$rootScop
     $scope.can = 1;
   }
 
+  $scope.busco_reserva = function(id) {
+    console.log('busco reserva');
+    $scope.inicializar_butacas();
+    $scope.can = 0;
+    $scope.disabled = true;
+    var promise
+    promise = $http.get($scope.base+'buscoreserva/'+id);
+    promise.then(function(data) {
+      
+      for (var i = 0; i < data.data.length; i++) {
+              row = data.data[i];
+              for (j = 0; j < row.length; j++) {
+                if(data.data[i][j] == 1)
+                  {
+                    $scope.butaca_no_disponible(i, j);
+                  }
+                if(data.data[i][j] == 2)
+                  {
+                    $scope.ocupar_butaca(i, j);
+                  }                  
+              }
+          }  
+    });
+    $scope.can = 1;
+  }
+
   $scope.crear_reserva = function(){
     console.log('creo reserva');
     var formData = new FormData();
@@ -103,12 +129,40 @@ app.controller("appController", ['$scope', '$sce', 'BASE', '$window', '$rootScop
           error(function(data, status, headers, config) {
               console.log(data);
           });    
-
   }
 
-  $scope.inicializar_butacas();
-  //$scope.ocupar_butaca(2, 2);
+  $scope.actualizar_reserva = function(){
+    console.log('actualizo reserva');
+    var formData = new FormData();
+    var usuario = $("#usuarios").val();
+    
+    $http({
+          method: 'POST', 
+          url: $scope.base+'actualizar-reserva/'+reserva_id, 
+          data: {
+              usuario_id: usuario,
+              cantidad: $scope.reserve,
+              fecha: $scope.fecha,
+              butacas: $scope.butacas
+          } }).success(function(data, status, headers, config) {
+            $window.location.href = $scope.base+'reservas';
+          }).
+          error(function(data, status, headers, config) {
+              console.log(data);
+          });    
+  }
+  
+  switch(seccion_id) {
+              case 1:
+                  $scope.inicializar_butacas();
+                  break;
+              case 2:
+                  $scope.inicializar_butacas();
+                  $scope.busco_reserva(reserva_id);
+                  break;
+              default:
 
+          }
 
   }]);
 
