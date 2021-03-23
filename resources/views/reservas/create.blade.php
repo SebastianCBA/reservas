@@ -10,6 +10,7 @@
     <script>
         var seccion_id = 1;
         var cantidad = 0;
+        var fecha = '';
     </script>
 @endsection
 

@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use App\Models\Detalle;
 use DB;
 use Session;
+use Illuminate\Support\Facades\Storage;
 
 class ReservaController extends Controller
 {
@@ -117,6 +118,9 @@ class ReservaController extends Controller
         $reserva->codigo = str_pad($reserva->id, 6, "0", STR_PAD_LEFT);
         $reserva->save();
         $matriz = $request->butacas;
+
+        $usuario = Usuario::Find($request->usuario_id);
+        $texto = "El usuario ".$usuario->nombres." ".$usuario->apellidos." ha registrado la siguiente reserva para ".$request->cantidad." personas para la fecha ".date('d-m-Y',strtotime($request->fecha)).", las siguientes butacas: ";
         
         for($fila = 0; $fila < 5; $fila++)
             {
@@ -129,12 +133,14 @@ class ReservaController extends Controller
                             $detalle->reserva_id = $reserva->id;
                             $detalle->fila = $fila;
                             $detalle->columna = $columna;
+                            $texto .= "(".$fila."-".$columna.")";
                             $detalle->save();
                         }    
 
                     }
 
             }
+        Storage::disk('local')->put($reserva->codigo.'.txt', $texto);    
         return response()->json('ok');
     }
 
