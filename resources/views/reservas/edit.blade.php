@@ -70,7 +70,12 @@
                 {!! Form::button('Actualizar', ['class' => 'btn btn-primary',
                                              'ng-click' => 'actualizar_reserva()',
                                              'ng-disabled' => 'disabled']) !!}
-        
+            <div class="form-group">
+                <span><img src="img/disponible.gif"> Disponible</span>
+                <span><img src="img/no_disponible.gif"> No Disponible</span>
+                <span><img src="img/ocupando.gif"> Reservando</span>
+                <span><img src="img/reset.gif"> Indeterminado</span>
+            </div>            
     </div>
 
 
